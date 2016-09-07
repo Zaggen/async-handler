@@ -1,4 +1,8 @@
 ```
+async = require('asyncawait/async')
+await = require('asyncawait/await')
+asyncHandler = require('async-handler')(async, await)
+
 HomeController =
     index: asyncHandler((req, res) ->
       await newsWidget(req, res)
