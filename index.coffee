@@ -14,19 +14,20 @@ module.exports = (async, await)->
     return wrapper
 
   makeCacheableAsyncWrapper = (action, ms)->
-    cache = {store: null}
+    cache = {}
     return makeAsyncHandler((req, res, next)->
-      if cache.store?
-        return res.send(200, cache.store)
+      key = req.url
+      if cache[key]?
+        return res.send(200, cache[key])
       else
         view = await action(req, res, next)
-        _store(cache, view, ms)
+        _store(cache, key,  view, ms)
     )
 
-  _store = (cache, data, ms)->
-    cache.store = data
+  _store = (cache, key,  data, ms)->
+    cache[key] = data
     setTimeout(=>
-      cache.store = null
+      cache[key] = null
     , ms)
 
   return makeAsyncHandler
