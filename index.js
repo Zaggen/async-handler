@@ -15,24 +15,23 @@
     };
     makeCacheableAsyncWrapper = function(action, ms) {
       var cache;
-      cache = {
-        store: null
-      };
+      cache = {};
       return makeAsyncHandler(function(req, res, next) {
-        var view;
-        if (cache.store != null) {
-          return res.send(200, cache.store);
+        var key, view;
+        key = req.url;
+        if (cache[key] != null) {
+          return res.send(200, cache[key]);
         } else {
           view = await(action(req, res, next));
-          return _store(cache, view, ms);
+          return _store(cache, key, view, ms);
         }
       });
     };
-    _store = function(cache, data, ms) {
-      cache.store = data;
+    _store = function(cache, key, data, ms) {
+      cache[key] = data;
       return setTimeout((function(_this) {
         return function() {
-          return cache.store = null;
+          return cache[key] = null;
         };
       })(this), ms);
     };
