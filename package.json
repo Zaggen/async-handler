@@ -1,6 +1,6 @@
 {
   "name": "async-handler",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Creates wrapper fns that use yortus async/await internally, to be used with express or sails route handlers / actions",
   "main": "index.js",
   "scripts": {
