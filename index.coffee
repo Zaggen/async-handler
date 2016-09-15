@@ -5,7 +5,7 @@
 module.exports = (async, await)->
   makeAsyncHandler = (routeHandler)->
     wrapper = (req, res, next)->
-      async(routeHandler)(req, res, next).catch(next)
+      async(routeHandler).call(@, req, res, next).catch(next)
 
     wrapper.cacheFor = (ms)->
       wrapper = makeCacheableAsyncWrapper(routeHandler,  ms)
@@ -20,7 +20,7 @@ module.exports = (async, await)->
       if cache[key]?
         return res.send(200, cache[key])
       else
-        view = await action(req, res, next)
+        view = await action.call(@, req, res, next)
         _store(cache, key,  view, ms)
     )
 
