@@ -5,7 +5,7 @@
     makeAsyncHandler = function(routeHandler) {
       var wrapper;
       wrapper = function(req, res, next) {
-        return async(routeHandler)(req, res, next)["catch"](next);
+        return async(routeHandler).call(this, req, res, next)["catch"](next);
       };
       wrapper.cacheFor = function(ms) {
         wrapper = makeCacheableAsyncWrapper(routeHandler, ms);
@@ -22,7 +22,7 @@
         if (cache[key] != null) {
           return res.send(200, cache[key]);
         } else {
-          view = await(action(req, res, next));
+          view = await(action.call(this, req, res, next));
           return _store(cache, key, view, ms);
         }
       });
